@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import openai
 import time
 import json
+import PyPDF2
 
 # Set up OpenAI API
 openai.api_key = "your_openai_api_key"
