@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import openai
 import time
 import json
-import PyPDF2
+import pypdf2   
 
 # Set up OpenAI API
 openai.api_key = "your_openai_api_key"
@@ -126,7 +126,7 @@ def generate_cover_letter(job):
     return response["choices"][0]["message"]["content"].strip()
 
 # Function to apply to jobs
-def apply_to_job(job, resume_path):
+def apply_to_job(job, resume_path, user_name, user_email):
     try:
         print(f"Applying to {job['title']} at {job['company']}...")
 
@@ -137,8 +137,8 @@ def apply_to_job(job, resume_path):
         response = requests.post(job["link"], files={
             "resume": open(resume_path, "rb")
         }, data={
-            "name": "Your Name",
-            "email": "your.email@example.com",
+            "name": user_name
+            "email": user_email
             "cover_letter": cover_letter,
         })
 
@@ -152,9 +152,10 @@ def apply_to_job(job, resume_path):
 # Main function
 def main():
     # Prompt user for input to determine relevant categories
-    user_name = input( "First and Last Name?")
+    name = input( "First and Last Name?")
+    email = input ("E-mail Address")
     user_input = input("Describe your skills and experience: ")
-    resume_path = input("Enter the path to your resume (PDF format): ")
+    resume_path = input("Enter the path to your resume (PDF format):")
 
     resume_text = extract_text_from_pdf(resume_path)
     categories = determine_categories(user_input, resume_text)
@@ -180,7 +181,7 @@ def main():
 
     # Apply to jobs
     for job in all_jobs:
-        apply_to_job(job, resume_path)
+        apply_to_job(job, resume_path, name, email)
 
 if __name__ == "__main__":
     main()
